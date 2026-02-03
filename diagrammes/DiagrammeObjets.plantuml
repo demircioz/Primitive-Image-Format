@@ -1,0 +1,65 @@
+@startuml
+title Diagramme d'Objets - État de l'arbre Huffman (Exemple A, B, C)
+
+' Style pour ressembler à des objets
+skinparam style strictuml
+skinparam objectBackgroundColor #FEFECE
+skinparam objectBorderColor #A80036
+
+' 1. L'instance principale
+object "h : Huffman" as h {
+    root = (ref n0)
+    --
+    ' On montre un exemple de ce que contiennent les maps
+    huffmanCodes = { 'A':"0", 'B':"10", 'C':"11" }
+}
+
+' 2. La racine (Nœud interne)
+' Fréquence = 40 (Somme de A + n1)
+object "n0 : Node" as root {
+    frequency = 40
+    left = (ref lA)
+    right = (ref n1)
+}
+
+' 3. La feuille A (Enfant gauche de la racine)
+object "lA : Leaf" as leafA {
+    frequency = 20
+    character = 'A'
+}
+
+' 4. Un nœud interne intermédiaire
+' Fréquence = 20 (Somme de B + C)
+object "n1 : Node" as node1 {
+    frequency = 20
+    left = (ref lB)
+    right = (ref lC)
+}
+
+' 5. Les feuilles du bas
+object "lB : Leaf" as leafB {
+    frequency = 10
+    character = 'B'
+}
+
+object "lC : Leaf" as leafC {
+    frequency = 10
+    character = 'C'
+}
+
+' --- Relations ---
+
+h -- root : pointe vers >
+
+root -- leafA : left >
+root -- node1 : right >
+
+node1 -- leafB : left >
+node1 -- leafC : right >
+
+note right of root
+  Notez la logique du code Java :
+  n0.freq (40) = lA.freq (20) + n1.freq (20)
+end note
+
+@enduml

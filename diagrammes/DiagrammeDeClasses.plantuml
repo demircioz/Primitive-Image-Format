@@ -1,0 +1,144 @@
+@startuml
+
+' --- Configuration visuelle ---
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam nodesep 60
+skinparam ranksep 60
+
+title Architecture Logicielle : Format d'Image PIF (SAÉ 3.2)
+
+' ================= PACKAGES =================
+
+package "fr.iutfbleau.sae32_2025" #DDDDDD {
+  class Main {
+    {static} + main(args : String[])
+  }
+}
+
+package "controllers" #E1F5FE {
+  class Converter {
+    {static} + main(args : String[])
+    {static} - openFileChooser()
+    {static} - startSave()
+  }
+
+  class Decoder {
+    {static} + main(args : String[])
+    {static} - loadAndDisplay(file : File)
+  }
+}
+
+package "models" #FFF9C4 {
+  class ImageAnalyzer {
+    - redFreq : Map<Integer, Integer>
+    + ImageAnalyzer(img : BufferedImage)
+    + getRedFreq() : Map
+  }
+
+  class Huffman {
+    - root : Node
+    - canonicalCodes : Map<Character, String>
+    + Huffman(freqs : Map)
+    + generateCanonicalCodes()
+    + getCanonicalCodes() : Map
+  }
+
+  class PifWriter {
+    {static} + save(img, codesR, codesG, codesB, file)
+  }
+
+  class PifReader {
+    {static} + load(file : File) : BufferedImage
+  }
+
+  class BitReader {
+    - in : InputStream
+    - currentByte : int
+    + BitReader(is : InputStream)
+    + readSymbol(root : Node) : int
+  }
+
+  class ValueLength {
+    + value : char
+    + length : int
+    + compareTo(other : ValueLength) : int
+  }
+
+  class Node <<Comparable>> {
+    # frequency : int
+    + getLeft() : Node
+    + getRight() : Node
+  }
+  
+  class Leaf {
+    - character : char
+    + getCharacter() : char
+  }
+}
+
+package "views" #E8F5E9 {
+  class AppTheme {
+    {static} + FONT_ROBOTO : Font
+    {static} + setupLookAndFeel()
+    {static} + loadAssetImage(path) : Image
+    {static} + createFileChooser() : JFileChooser
+  }
+
+  class HomeFrame {
+    + HomeFrame()
+  }
+
+  class ConverterFrame {
+    + updateData(statsR, statsG, statsB)
+    + displayImage(img : BufferedImage)
+  }
+
+  class ViewerFrame {
+    + displayImage(img : BufferedImage)
+  }
+
+  class PanZoomImagePanel {
+    - zoomFactor : double
+    - xOffset : double
+    # paintComponent(g : Graphics)
+  }
+}
+
+' ================= RELATIONS =================
+
+' --- Héritage ---
+Leaf --|> Node
+
+' --- Dépendances Point d'Entrée ---
+Main ..> HomeFrame : Lance
+Main ..> AppTheme : Configure Look&Feel
+
+' --- Controller -> View ---
+Converter --> ConverterFrame : Pilote
+Decoder --> ViewerFrame : Pilote
+HomeFrame ..> Converter : Ouvre
+HomeFrame ..> Decoder : Ouvre
+
+' --- Controller -> Model ---
+Converter ..> ImageAnalyzer : Utilise
+Converter ..> Huffman : Utilise
+Converter ..> PifWriter : Utilise
+Decoder ..> PifReader : Utilise
+
+' --- Model Internals ---
+PifReader ..> BitReader : Utilise pour le flux
+PifReader ..> Node : Reconstruit l'arbre
+Huffman ..> ValueLength : Utilise pour le tri canonique
+Huffman *-- Node : Possède
+
+' --- View Internals ---
+ConverterFrame *-- PanZoomImagePanel : Intègre
+ViewerFrame *-- PanZoomImagePanel : Intègre
+ConverterFrame ..> AppTheme : Applique styles
+ViewerFrame ..> AppTheme : Applique styles
+HomeFrame ..> AppTheme : Applique styles
+
+@enduml

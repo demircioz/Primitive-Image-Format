@@ -1,0 +1,10 @@
+# Compilation Java
+*.class
+/build/
+/tmp/
+
+# IDE et Logs
+.idea/
+.vscode/
+*.iml
+*.log
