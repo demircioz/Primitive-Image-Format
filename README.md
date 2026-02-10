@@ -4,14 +4,14 @@ A complete and elegant software suite for image compression and visualization, d
 
 ## 📖 Table of Contents
 
-* [Introduction](https://www.google.com/search?q=%23introduction)
-* [Main Features](https://www.google.com/search?q=%23main-features)
-* [MVC Architecture](https://www.google.com/search?q=%23mvc-architecture)
-* [Project Structure](https://www.google.com/search?q=%23project-structure)
-* [Compilation and Execution](https://www.google.com/search?q=%23compilation-and-execution)
-* [Algorithm & Performance](https://www.google.com/search?q=%23algorithm--performance)
-* [Authors](https://www.google.com/search?q=%23authors)
-* [Acknowledgments](https://www.google.com/search?q=%23acknowledgments)
+* [Introduction](#introduction)
+* [Main Features](#main-features)
+* [MVC Architecture](#mvc-architecture)
+* [Project Structure](#project-structure)
+* [Compilation and Execution](#compilation-and-execution)
+* [Algorithm & Performance](#algorithm--performance)
+* [Authors](#authors)
+* [Acknowledgments](#acknowledgments)
 
 <a id="introduction"></a>
 
